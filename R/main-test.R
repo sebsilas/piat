@@ -1,27 +1,36 @@
-main_test <- function(label, media_dir, num_items, dict) {
-  psychTestR::new_timeline(psychTestRCAT::adapt_test(
+main_test <- function(label, media_dir, num_items, dict, prepend_interleaving_trial_page = NULL, append_interleaving_trial_page = NULL) {
+  psychTestRCAT::adapt_test(
     label = label,
     item_bank = get_item_bank(),
-    show_item = show_item(media_dir),
+    show_item = show_item(media_dir, dict, prepend_interleaving_trial_page, append_interleaving_trial_page),
     stopping_rule = psychTestRCAT::stopping_rule.num_items(n = num_items),
     opt = piat.options()
-  ), dict = dict)
+  )
 }
 
-show_item <- function(media_dir) {
-  function(item, ...) {
-    stopifnot(is(item, "item"), nrow(item) == 1L)
-    item_number <- psychTestRCAT::get_item_number(item)
-    num_items_in_test <- psychTestRCAT::get_num_items_in_test(item)
-    psychTestR::video_NAFC_page(
-      label = paste0("q", item_number),
-      prompt = get_prompt(item_number, num_items_in_test),
-      choices = get_choices(),
-      url = get_item_path(item, media_dir),
-      admin_ui = get_admin_ui(item, media_dir),
-      save_answer = FALSE
-    )
-  }
+show_item <- function(media_dir,
+                      dict,
+                      prepend_interleaving_trial_page = NULL,
+                      append_interleaving_trial_page = NULL) {
+  psychTestR::new_timeline(
+    psychTestR::join(
+      prepend_interleaving_trial_page,
+      psychTestR::reactive_page(function(state, ...) {
+        item <- psychTestR::get_local("item", state)
+        stopifnot(is(item, "item"), nrow(item) == 1L)
+        item_number <- psychTestRCAT::get_item_number(item)
+        num_items_in_test <- psychTestRCAT::get_num_items_in_test(item)
+        psychTestR::video_NAFC_page(
+          label = paste0("q", item_number),
+          prompt = get_prompt(item_number, num_items_in_test),
+          choices = get_choices(),
+          url = get_item_path(item, media_dir),
+          admin_ui = get_admin_ui(item, media_dir),
+          save_answer = FALSE
+        )
+      }),
+      append_interleaving_trial_page
+      ), dict = dict)
 }
 
 get_admin_ui <- function(item, media_dir) {

@@ -10,19 +10,25 @@
 #' @param languages (Character vector)
 #' Determines the languages available to participants.
 #' Possible languages include English (\code{"EN"}) and German (\code{"DE"}).
+#' @param dict The dictionary to use.
+#' @param prepend_interleaving_trial_page An optional interleaving page to come before the main trial page.
+#' @param append_interleaving_trial_page An optional interleaving page to come after the main trial page.
+#' @param get_p_id Should the p_id be colelcted from the user?
+#' @param post_training_tl An optional timeline to displayed post-training.
 #' @param ... Further arguments to be passed to \code{\link{piat}()}.
 #'
-#' @inheritParams piat
 #' @export
 standalone_piat <- function(title = "Pitch imagery ability test",
                             admin_password = "replace-with-secure-password",
                             researcher_email = NULL,
                             languages = piat_languages(),
                             dict = piat::piat_dict,
+                            prepend_interleaving_trial_page = NULL,
+                            append_interleaving_trial_page = NULL,
+                            get_p_id = TRUE,
                             ...) {
   begin <- psychTestR::new_timeline(list(
-    psychTestR::get_p_id(prompt = psychTestR::i18n("enter_p_id"),
-                         button_text = psychTestR::i18n("PIAT_024"))),
+    if(get_p_id) psychTestR::get_p_id(prompt = psychTestR::i18n("enter_p_id"), button_text = psychTestR::i18n("PIAT_024"))),
     dict = dict)
 
   end <- psychTestR::new_timeline(list(

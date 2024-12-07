@@ -10,6 +10,9 @@ standalone_piat(
   researcher_email = NULL,
   languages = piat_languages(),
   dict = piat::piat_dict,
+  prepend_interleaving_trial_page = NULL,
+  append_interleaving_trial_page = NULL,
+  get_p_id = TRUE,
   ...
 )
 }
@@ -26,9 +29,17 @@ at the bottom of the screen so that online participants can ask for help.}
 Determines the languages available to participants.
 Possible languages include English (\code{"EN"}) and German (\code{"DE"}).}
 
-\item{dict}{The psychTestR dictionary used for internationalisation.}
+\item{dict}{The dictionary to use.}
+
+\item{prepend_interleaving_trial_page}{An optional interleaving page to come before the main trial page.}
+
+\item{append_interleaving_trial_page}{An optional interleaving page to come after the main trial page.}
+
+\item{get_p_id}{Should the p_id be colelcted from the user?}
 
 \item{...}{Further arguments to be passed to \code{\link{piat}()}.}
+
+\item{post_training_tl}{An optional timeline to displayed post-training.}
 }
 \description{
 This function launches a standalone testing session for the PIAT.

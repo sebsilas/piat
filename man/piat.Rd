@@ -10,7 +10,10 @@ piat(
   label = "PIAT",
   feedback = piat.feedback.no_score(dict = dict),
   media_dir = "https://media.gold-msi.org/test_materials/PIAT/1-0-1/mp4",
-  dict = piat::piat_dict
+  dict = piat::piat_dict,
+  prepend_interleaving_trial_page = NULL,
+  append_interleaving_trial_page = NULL,
+  post_training_tl = NULL
 )
 }
 \arguments{
@@ -27,6 +30,12 @@ at the end of the test. By default no feedback is given.}
 hosting the test's media files (typically a publicly accessible web directory).}
 
 \item{dict}{The psychTestR dictionary used for internationalisation.}
+
+\item{prepend_interleaving_trial_page}{An optional interleaving page to come before the main trial page.}
+
+\item{append_interleaving_trial_page}{An optional interleaving page to come after the main trial page.}
+
+\item{post_training_tl}{An optional timeline to displayed post-training.}
 }
 \description{
 This function defines an pitch imagery ability test (PIAT)
