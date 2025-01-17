@@ -33,15 +33,16 @@ piat <- function(num_items = 25L,
                  post_training_tl = NULL) {
   stopifnot(is.scalar.character(label), is.scalar.numeric(num_items),
             is.scalar.logical(take_training), is.scalar.character(media_dir),
-            is.null.or(prepend_interleaving_trial_page, psychTestR::is.test_element),
-            is.null.or(append_interleaving_trial_page, psychTestR::is.test_element),
-            is.null.or(post_training_tl, psychTestR::is.test_element))
+            is.null(prepend_interleaving_trial_page) || psychTestR::is.test_element(prepend_interleaving_trial_page) ||  psychTestR::is.timeline(prepend_interleaving_trial_page) || is.list(prepend_interleaving_trial_page),
+            is.null(append_interleaving_trial_page) || psychTestR::is.test_element(append_interleaving_trial_page) ||  psychTestR::is.timeline(append_interleaving_trial_page) || is.list(append_interleaving_trial_page),
+            is.null(post_training_tl) || psychTestR::is.test_element(post_training_tl) ||  psychTestR::is.timeline(post_training_tl) || is.list(post_training_tl)
+  )
   media_dir <- gsub("/$", "", media_dir)
 
   psychTestR::join(
     if (take_training) training(media_dir, num_items, dict),
     post_training_tl,
-    main_test(label, media_dir, num_items, dict, prepend_interleaving_trial_page = NULL, append_interleaving_trial_page = NULL),
+    main_test(label, media_dir, num_items, dict, prepend_interleaving_trial_page = prepend_interleaving_trial_page, append_interleaving_trial_page = append_interleaving_trial_page),
     feedback
   )
 }
